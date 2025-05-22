@@ -6,7 +6,7 @@ on:
 jobs:
   test:
     timeout-minutes: 10
-    runs-on: goto-windows-x64-4core
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v4
         with:
