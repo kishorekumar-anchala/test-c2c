@@ -1,0 +1,13 @@
+name: test
+
+on:
+  push:
+
+jobs:
+  test:
+    timeout-minutes: 10
+    runs-on: goto-windows-x64-4core
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ssh-key: "${{ secrets.TMP_SSH_KEY }}"
