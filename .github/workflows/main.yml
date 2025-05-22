@@ -1,13 +1,17 @@
-name: test
+name: Windows Powershell
 
 on:
-  push:
+  workflow_dispatch:
 
 jobs:
-  test:
-    timeout-minutes: 10
-    runs-on: windows-2025
+  mkfile:
+    strategy:
+      matrix:
+        win: [windows-latest, windows-2025, self-hosted]
+    runs-on: ${{ matrix.win }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ssh-key: "${{ secrets.TMP_SSH_KEY }}"
+      - run: |
+          $currentDirectory = Get-Location
+          $filePath = Join-Path -Path $currentDirectory -ChildPath "NewFile.txt"
+          New-Item -Path $filePath -ItemType File -Force
+          icacls $filePath
