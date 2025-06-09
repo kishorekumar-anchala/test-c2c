@@ -1,23 +1,27 @@
-name: CI Workflow
+name: Test Libpcap Installation
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set Up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
+      - name: Enable Multi-Arch Support
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt update
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Install Both Architectures
+        run: |
+          sudo apt install -y libpcap0.8-dev:amd64 libpcap0.8-dev:i386
 
-      - name: Run Tests
-        run: npm test
+      - name: Verify Installation
+        run: dpkg -l | grep libpcap
