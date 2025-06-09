@@ -1,17 +1,23 @@
-name: Windows Powershell
+name: CI Workflow
 
 on:
-  workflow_dispatch:
+  push:
 
 jobs:
-  mkfile:
-    strategy:
-      matrix:
-        win: [windows-latest, windows-2025, self-hosted]
-    runs-on: ${{ matrix.win }}
+  build:
+    runs-on: ubuntu-latest
+
     steps:
-      - run: |
-          $currentDirectory = Get-Location
-          $filePath = Join-Path -Path $currentDirectory -ChildPath "NewFile.txt"
-          New-Item -Path $filePath -ItemType File -Force
-          icacls $filePath
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
